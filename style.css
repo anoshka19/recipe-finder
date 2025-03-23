@@ -1,0 +1,61 @@
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    /* background-image: url('frnt.jpg'); */
+  }
+  .first{
+    background-image: url('frnt.jpg');
+
+  }
+.rev{
+    background-image: url('img.jpg');
+
+}
+.addr{
+    background-image: url('addrec.jpg');
+}
+.log{
+    background-image: url('log.jpg');
+}
+.rev{
+    background-image: url('rev.jpg');
+}
+.ser
+{
+    background-image: url('ser.jpg');
+}
+  header {
+    /* background-color: #4CAF50; */
+    color: white;
+    padding: 20px;
+  }
+  
+  main {
+    padding: 20px;
+  }
+  
+  .btn {
+    display: inline-block;
+    /*background-color: #4CAF50; */
+    color: white;
+    padding: 10px 20px;
+  
+    text-decoration: none;
+    border-radius: 4px;
+    
+  }
+  
+  .recipe-card {
+    border: 1px solid #9f1010;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+  }
+  
+  .review {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+  }

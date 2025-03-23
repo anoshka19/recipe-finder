@@ -1,0 +1,66 @@
+<!-- reviews.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reviews - Tasty Bites</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="rev">
+  <header>
+    <h1>Reviews</h1>
+  </header>
+  <main>
+    <h2>Existing Reviews</h2>
+    <div id="reviewList">
+      <div class="review">
+        <h3>John Doe</h3>
+        <p><strong>Rating:</strong> 5/5</p>
+        <p>"Absolutely loved the pasta recipe!"</p>
+      </div>
+    </div>
+
+    <h2>Submit a Review</h2>
+    <form id="reviewForm">
+      <label for="reviewerName">Your Name:</label>
+      <input type="text" id="reviewerName" name="reviewerName" required>
+      
+      <label for="rating">Rating:</label>
+      <select id="rating" name="rating" required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      
+      <label for="reviewText">Review:</label>
+      <textarea id="reviewText" name="reviewText" rows="5" required></textarea>
+      
+      <button type="submit">Submit</button>
+    </form>
+  </main>
+
+  <script>
+    document.getElementById('reviewForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const reviewerName = document.getElementById('reviewerName').value;
+      const rating = document.getElementById('rating').value;
+      const reviewText = document.getElementById('reviewText').value;
+
+      const reviewList = document.getElementById('reviewList');
+      reviewList.innerHTML += `
+        <div class="review">
+          <h3>${reviewerName}</h3>
+          <p><strong>Rating:</strong> ${rating}/5</p>
+          <p>"${reviewText}"</p>
+        </div>
+      `;
+
+      alert('Thank you for your review!');
+      document.getElementById('reviewForm').reset();
+    });
+  </script>
+</body>
+</html>

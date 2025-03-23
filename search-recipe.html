@@ -1,0 +1,172 @@
+<!-- search-recipe.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Recipes - Tasty Bites</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="ser">
+  <header>
+    <h1>Search Recipes</h1>
+  </header>
+  <main>
+    <form id="searchForm" onsubmit="event.preventDefault(); searchRecipes();">
+      <label for="searchBar" class="sr-only">Search by recipe name or ingredients:</label>
+      <input type="text" id="searchBar" placeholder="Search by recipe name or ingredients" aria-label="Search recipes">
+      <button type="submit">Search</button>
+  </form>
+
+    <div id="results" role="region" aria-live="polite"></div>
+  </main>
+
+  <script>
+    const recipes = [
+      {
+        name: 'Spaghetti Carbonara',
+        image: 'https://via.placeholder.com/300?text=Spaghetti+Carbonara',
+        description: 'Creamy pasta dish with eggs, cheese, and pancetta.',
+        ingredients: ['Spaghetti', 'Eggs', 'Pecorino Cheese', 'Pancetta', 'Black Pepper'],
+        prepTime: '25 minutes',
+        servings: 4,
+        tags: ['Italian', 'Quick', 'Comfort Food']
+      },
+      {
+        name: 'Chicken Tikka Masala',
+        image: 'https://via.placeholder.com/300?text=Chicken+Tikka+Masala',
+        description: 'Rich and flavorful Indian curry with tender chicken.',
+        ingredients: ['Chicken', 'Yogurt', 'Tomato Sauce', 'Garlic', 'Garam Masala', 'Cream'],
+        prepTime: '45 minutes',
+        servings: 4,
+        tags: ['Indian', 'Spicy', 'Gluten-Free']
+      },
+      {
+        name: 'Caesar Salad',
+        image: 'https://via.placeholder.com/300?text=Caesar+Salad',
+        description: 'Classic salad with romaine lettuce, croutons, and Caesar dressing.',
+        ingredients: ['Romaine Lettuce', 'Croutons', 'Parmesan Cheese', 'Caesar Dressing', 'Grilled Chicken (optional)'],
+        prepTime: '15 minutes',
+        servings: 2,
+        tags: ['Healthy', 'Vegetarian-Friendly', 'Low-Carb']
+      },
+      {
+        name: 'Beef Stir-Fry',
+        image: 'https://via.placeholder.com/300?text=Beef+Stir-Fry',
+        description: 'Savory stir-fry with beef, vegetables, and soy sauce.',
+        ingredients: ['Beef Strips', 'Bell Peppers', 'Broccoli', 'Soy Sauce', 'Garlic', 'Ginger'],
+        prepTime: '30 minutes',
+        servings: 4,
+        tags: ['Asian', 'Quick', 'High-Protein']
+      },
+      {
+        name: 'Chocolate Brownies',
+        image: 'https://via.placeholder.com/300?text=Chocolate+Brownies',
+        description: 'Fudgy and rich chocolate brownies.',
+        ingredients: ['Butter', 'Sugar', 'Cocoa Powder', 'Eggs', 'Flour', 'Vanilla Extract'],
+        prepTime: '40 minutes',
+        servings: 12,
+        tags: ['Dessert', 'Sweet', 'Easy']
+      },
+      {
+        name: 'Vegan Lentil Soup',
+        image: 'https://via.placeholder.com/300?text=Vegan+Lentil+Soup',
+        description: 'Hearty and nutritious lentil soup.',
+        ingredients: ['Lentils', 'Carrots', 'Celery', 'Onion', 'Tomato Paste', 'Vegetable Broth'],
+        prepTime: '50 minutes',
+        servings: 6,
+        tags: ['Vegan', 'Healthy', 'Gluten-Free']
+      },
+      {
+        name: 'Shrimp Tacos',
+        image: 'https://via.placeholder.com/300?text=Shrimp+Tacos',
+        description: 'Delicious tacos with shrimp, cabbage slaw, and lime crema.',
+        ingredients: ['Shrimp', 'Corn Tortillas', 'Cabbage', 'Lime', 'Sour Cream', 'Avocado'],
+        prepTime: '20 minutes',
+        servings: 4,
+        tags: ['Mexican', 'Seafood', 'Quick']
+      },
+      {
+        name: 'Mushroom Risotto',
+        image: 'https://via.placeholder.com/300?text=Mushroom+Risotto',
+        description: 'Creamy risotto with mushrooms and Parmesan cheese.',
+        ingredients: ['Arborio Rice', 'Mushrooms', 'Vegetable Broth', 'Parmesan Cheese', 'Butter', 'Onion'],
+        prepTime: '35 minutes',
+        servings: 4,
+        tags: ['Italian', 'Vegetarian', 'Comfort Food']
+      },
+      {
+        name: 'Greek Salad',
+        image: 'https://via.placeholder.com/300?text=Greek+Salad',
+        description: 'Refreshing salad with cucumbers, tomatoes, olives, and feta cheese.',
+        ingredients: ['Cucumbers', 'Tomatoes', 'Red Onion', 'Olives', 'Feta Cheese', 'Olive Oil'],
+        prepTime: '10 minutes',
+        servings: 4,
+        tags: ['Mediterranean', 'Healthy', 'Vegetarian']
+      },
+      {
+        name: 'Pancakes',
+        image: 'https://via.placeholder.com/300?text=Pancakes',
+        description: 'Fluffy pancakes perfect for breakfast.',
+        ingredients: ['Flour', 'Milk', 'Eggs', 'Sugar', 'Baking Powder', 'Butter'],
+        prepTime: '20 minutes',
+        servings: 6,
+        tags: ['Breakfast', 'Sweet', 'Easy']
+      }
+    ];
+
+
+    function searchRecipes() {
+  const query = document.getElementById('searchBar').value.toLowerCase();
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
+
+  // Filter recipes based on the query
+  const filteredRecipes = recipes.filter(recipe => {
+    // Ensure recipe exists and is valid
+    if (!recipe || typeof recipe !== 'object') return false;
+
+    // Check if the recipe name matches the query
+    const nameMatch = recipe.name && typeof recipe.name === 'string' &&
+      recipe.name.toLowerCase().includes(query);
+
+    // Check if any ingredient matches the query
+    const ingredientsMatch = Array.isArray(recipe.ingredients) &&
+      recipe.ingredients.some(ingredient =>
+        typeof ingredient === 'string' && ingredient.toLowerCase().includes(query)
+      );
+
+    // Check if any tag matches the query
+    const tagsMatch = Array.isArray(recipe.tags) &&
+      recipe.tags.some(tag =>
+        typeof tag === 'string' && tag.toLowerCase().includes(query)
+      );
+
+    // Return true if any condition matches
+    return nameMatch || ingredientsMatch || tagsMatch;
+  });
+
+  // Display the filtered recipes
+  if (filteredRecipes.length > 0) {
+    filteredRecipes.forEach(recipe => {
+      resultsDiv.innerHTML += `
+        <div class="recipe-card">
+          <img src="${recipe.image}" alt="${recipe.name}">
+          <h3>${recipe.name}</h3>
+          <p><strong>Description:</strong> ${recipe.description || 'No description available.'}</p>
+          <p><strong>Ingredients:</strong> ${Array.isArray(recipe.ingredients) ? recipe.ingredients.join(', ') : 'N/A'}</p>
+          <p><strong>Preparation Time:</strong> ${recipe.prepTime || 'N/A'}</p>
+          <p><strong>Servings:</strong> ${recipe.servings || 'N/A'}</p>
+          <p><strong>Tags:</strong> ${Array.isArray(recipe.tags) ? recipe.tags.join(', ') : 'N/A'}</p>
+        </div>
+      `;
+    });
+  } else {
+    resultsDiv.innerHTML = '<p>No recipes found.</p>';
+  }
+}  
+
+    
+  </script>
+</body>
+</html>
