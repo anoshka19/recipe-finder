@@ -26,6 +26,6 @@ For Software:
 )
 basic plan of our project
 ## Team Contributions
-- [Nandana E]: [coding]
+- [Nandana E]:[coding]
 - [Anoshka lal]: [idea,codding]
-- [Sagarika prasandan]: [designer]
+- [Sagarika prasandan]:[designer]
